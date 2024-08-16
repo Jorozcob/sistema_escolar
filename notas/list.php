@@ -20,9 +20,13 @@ $stmt = $pdo->query($sql);
     <title>Lista de Notas</title>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl">
-        <h2 class="text-2xl font-bold mb-6 text-center text-gray-700">Lista de Notas</h2>
-        
+  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl">
+  <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-6">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-white">Lista de notas</h2>
+                    <a href="index.php" class="bg-white text-indigo-600 py-2 px-4 rounded-lg font-medium hover:bg-indigo-50 transition duration-300">Regresar</a>
+                </div>
+            </div>
         <table class="min-w-full bg-white border border-gray-300">
             <thead>
                 <tr>
