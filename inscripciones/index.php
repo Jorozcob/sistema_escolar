@@ -46,7 +46,7 @@
                     require '../conf/database.php';
 
                     // Consulta SQL para obtener los estudiantes asignados a los cursos
-                    $sql = "SELECT * FROM estudiantes_asignados";
+                    $sql = "SELECT * FROM estudiantes_asignados where insc_estado = 'A'";
 
                     $stmt = $pdo->query($sql);
 
