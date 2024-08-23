@@ -47,7 +47,7 @@
 
                     $stmt = $pdo->query($sql);
 
-                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) { //Generan las filas
                         echo "<tr class='text-gray-800 hover:bg-gray-100'>";
                         echo "<td class='border px-4 py-2 '>" . htmlspecialchars($row['estu_id']) . "</td>";
                         echo "<td class='border px-4 py-2 '>" . htmlspecialchars($row['estu_primer_nombre']) . ' ' . htmlspecialchars($row['estu_primer_apellido']) . "</td>";

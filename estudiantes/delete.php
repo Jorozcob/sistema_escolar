@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             throw new Exception("ID no proporcionado.");
         }
 
-        $id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
+        $id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT); // Se sanitiza el ID recibido asegurarse que sea un entero
 
         // Verifica si el ID es válido
         if (!filter_var($id, FILTER_VALIDATE_INT)) {

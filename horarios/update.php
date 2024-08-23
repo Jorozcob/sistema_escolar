@@ -28,6 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+
 $id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
 $sql = "SELECT * FROM horarios WHERE hora_id = ?";
 $stmt = $pdo->prepare($sql);
