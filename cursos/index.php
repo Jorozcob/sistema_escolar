@@ -1,7 +1,7 @@
 <?php
 require '../conf/database.php';
 
-// Consulta para obtener los cursesores activos
+
 $sql = "SELECT * FROM cursos";
 $stmt = $pdo->query($sql);
 ?>
@@ -18,7 +18,7 @@ $stmt = $pdo->query($sql);
 
 <body class="bg-gradient-to-r from-blue-500 via-gray-500 to-white text-gray-200 min-h-screen">
 
-    <!-- Navegación -->
+
     <nav class="bg-blue-900 p-4 shadow-lg">
         <div class="container mx-auto flex items-center justify-between">
             <h1 class="text-white text-3xl font-extrabold">Gestión</h1>
@@ -36,7 +36,6 @@ $stmt = $pdo->query($sql);
         </div>
     </nav>
 
-    <!-- Contenido principal -->
     <div class="container mx-auto p-6">
         <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-6xl mx-auto">
             <h2 class="text-2xl font-bold mb-4 text-center text-gray-700">Lista</h2>

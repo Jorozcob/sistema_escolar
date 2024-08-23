@@ -63,7 +63,7 @@ JOIN
 WHERE 
     estudiantes.estu_estado = 'A'
 ORDER BY 
-    cursos.curs_id;
+    cursos.curs_id
 ";
 
                     $stmt = $pdo->query($sql);

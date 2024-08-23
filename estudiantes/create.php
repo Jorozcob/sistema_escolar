@@ -13,20 +13,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 VALUES (?, ?, ?, ?, ?)";
         $stmt = $pdo->prepare($sql);
         if ($stmt->execute([$nombre, $segundo_nombre, $apellido, $segundo_apellido, $email])) {
-            echo "Estudiante creado exitosamente.";
+         header("Location: index.php");
+        exit();
         } else {
             echo "Error al crear el estudiante.";
         }
     } else {
         echo "Email no válido.";
     }
-    if ($stmt->execute([$nombre, $descripcion])) {
-        // Redireccionar al índice después de crear el curso
-        header("Location: index.php");
-        exit(); // Asegura que se detiene la ejecución del script
-    } else {
-        echo "Error al crear el curso.";
-    }
+   
 }
 ?>
 

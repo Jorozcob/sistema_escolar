@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt = $pdo->prepare($sql);
     if ($stmt->execute([$nombre, $descripcion])) {
       header("Location: index.php");
-      exit(); // Asegura que se detiene la ejecución del script
+      exit(); 
     } else {
         echo "Error al crear el curso.";
     }

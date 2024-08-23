@@ -9,17 +9,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Extraer el ID del estudiante
     $estudiante_id = intval(explode(' - ', $estudiante_input)[0]);
     
-    // Extraer el ID del curso
+    
     $curso_id = intval(explode(' - ', $curso_input)[0]);
+    
 
     if ($estudiante_id > 0 && $curso_id > 0 && !empty($fecha_inscripcion)) {
         $sql = "INSERT INTO inscripciones (insc_estudiante_id, insc_curso_id, insc_fecha_inscripcion) VALUES (?, ?, ?)";
         $stmt = $pdo->prepare($sql);
         if ($stmt->execute([$estudiante_id, $curso_id, $fecha_inscripcion])) {
             echo "Inscripción creada exitosamente.";
-            // Redirigir al índice después de crear la inscripción
+            
             header("Location: index.php");
-            exit(); // Asegura que se detiene la ejecución del script
+            exit(); 
         } else {
             echo "Error al crear la inscripción.";
         }
@@ -55,12 +56,12 @@ $cursos = $cursos_stmt->fetchAll(PDO::FETCH_ASSOC);
         
         <div class="mb-4">
             <label for="estudiante_id" class="block text-gray-700 font-semibold mb-2">Estudiante:</label>
-            <input type="text" name="estudiante_id" id="estudiante_id" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Escribe el ID del estudiante o nombre">
+            <input type="text" name="estudiante_id" id="estudiante_id" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="ID del estudiante o nombre">
         </div>
 
         <div class="mb-4">
             <label for="curso_id" class="block text-gray-700 font-semibold mb-2">Curso:</label>
-            <input type="text" name="curso_id" id="curso_id" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Escribe el ID del curso o nombre">
+            <input type="text" name="curso_id" id="curso_id" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="ID del curso o nombre">
         </div>
 
         <div class="mb-4">
@@ -71,8 +72,8 @@ $cursos = $cursos_stmt->fetchAll(PDO::FETCH_ASSOC);
         <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
             Crear Inscripción
         </button>
+        
     </form>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const estudiantes = <?php echo json_encode(array_column($estudiantes, 'estudiante')); ?>;

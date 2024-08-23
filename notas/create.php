@@ -1,23 +1,36 @@
 <?php
 require '../conf/database.php';
 
-// Consulta para obtener la lista de estudiantes con sus cursos e inscripciones
-$sql = "SELECT concat('Estudiante: ', estu_id, ' ', estu_primer_nombre, ' ', estu_primer_apellido, ' - ', 'Curso: ', curs_nombre) as estudiante, insc_id
-        FROM estudiantes
-        JOIN inscripciones ON insc_estudiante_id = estu_id
-        JOIN cursos ON curs_id = insc_curso_id";
-$stmt = $pdo->query($sql);
-$estudiantes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$sql_estudiantes = "SELECT CONCAT(estu_id, ' - ', estu_primer_nombre, ' ', estu_primer_apellido) as estudiante
+                    FROM estudiantes
+                    WHERE estu_estado = 'A'";
+$stmt_estudiantes = $pdo->query($sql_estudiantes);
+$estudiantes = $stmt_estudiantes->fetchAll(PDO::FETCH_ASSOC);
+
+$sql_cursos = "SELECT CONCAT(curs_id, ' - ', curs_nombre) as curso
+               FROM cursos";
+$stmt_cursos = $pdo->query($sql_cursos);
+$cursos = $stmt_cursos->fetchAll(PDO::FETCH_ASSOC);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $inscripcion_id = filter_var($_POST['inscripcion_id'], FILTER_SANITIZE_NUMBER_INT);
+    $estudiante_input = $_POST['estudiante'];
+    $curso_input = $_POST['curso'];
     $valor = filter_var($_POST['valor'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
     $fecha = htmlspecialchars(trim($_POST['fecha']));
 
-    if (filter_var($inscripcion_id, FILTER_VALIDATE_INT) && filter_var($valor, FILTER_VALIDATE_FLOAT) && !empty($fecha)) {
+    // Extraer los IDs
+    $estudiante_id = intval(explode(' - ', $estudiante_input)[0]);
+    $curso_id = intval(explode(' - ', $curso_input)[0]);
+
+    $sql_inscripcion = "SELECT insc_id FROM inscripciones WHERE insc_estudiante_id = ? AND insc_curso_id = ?";
+    $stmt_inscripcion = $pdo->prepare($sql_inscripcion);
+    $stmt_inscripcion->execute([$estudiante_id, $curso_id]);
+    $inscripcion = $stmt_inscripcion->fetch(PDO::FETCH_ASSOC);
+
+    if ($inscripcion && filter_var($valor, FILTER_VALIDATE_FLOAT) && !empty($fecha)) {
         $sql = "INSERT INTO notas (nota_inscripcion_id, nota_valor, nota_fecha) VALUES (?, ?, ?)";
         $stmt = $pdo->prepare($sql);
-        if ($stmt->execute([$inscripcion_id, $valor, $fecha])) {
+        if ($stmt->execute([$inscripcion['insc_id'], $valor, $fecha])) {
             echo "Nota creada exitosamente.";
             header("Location: index.php");
             exit();
@@ -25,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Error al crear la nota.";
         }
     } else {
-        echo "Datos no válidos.";
+        echo "Datos no válidos o el estudiante no está inscrito en el curso seleccionado.";
     }
 }
 ?>
@@ -36,23 +49,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.5/awesomplete.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.5/awesomplete.css">
     <title>Crear Nota</title>
-    
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <form method="POST" class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+        <a href="index.php" class="bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-indigo-400 transition duration-300">Regresar</a>
         <h2 class="text-2xl font-bold mb-4 text-center text-gray-700">Crear Nota</h2>
-        <a href="index.php" class="bg-white text-indigo-600 py-2 px-4 rounded-lg font-medium hover:bg-indigo-50 transition duration-300">Regresar</a>
+        
         <div class="mb-4">
-            <label for="inscripcion_id" class="block text-gray-700 font-semibold mb-2">Estudiante y Curso:</label>
-            <select name="inscripcion_id" id="inscripcion_id" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="">Seleccione un estudiante</option>
-                <?php foreach ($estudiantes as $estudiante): ?>
-                    <option value="<?php echo htmlspecialchars($estudiante['insc_id']); ?>">
-                        <?php echo htmlspecialchars($estudiante['estudiante']); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+            <label for="estudiante" class="block text-gray-700 font-semibold mb-2">Estudiante:</label>
+            <input type="text" name="estudiante" id="estudiante" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Buscar estudiante">
+        </div>
+
+        <div class="mb-4">
+            <label for="curso" class="block text-gray-700 font-semibold mb-2">Curso:</label>
+            <input type="text" name="curso" id="curso" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Buscar curso">
         </div>
 
         <div class="mb-4">
@@ -69,5 +82,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             Crear Nota
         </button>
     </form>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const estudiantes = <?php echo json_encode(array_column($estudiantes, 'estudiante')); ?>;
+            const cursos = <?php echo json_encode(array_column($cursos, 'curso')); ?>;
+
+            new Awesomplete(document.getElementById('estudiante'), {
+                list: estudiantes,
+                minChars: 1,
+                autoFirst: true
+            });
+
+            new Awesomplete(document.getElementById('curso'), {
+                list: cursos,
+                minChars: 1,
+                autoFirst: true
+            });
+        });
+    </script>
 </body>
 </html>
