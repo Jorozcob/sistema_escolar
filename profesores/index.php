@@ -5,7 +5,7 @@ require '../conf/database.php';
 $sql = "SELECT prof_id, CONCAT(prof_primer_nombre, ' ', prof_primer_apellido) AS nombre, curs_id, curs_nombre
         FROM profesores_cursos
         JOIN profesores ON prof_id = prof_curs_profesor_id
-        JOIN cursos ON curs_id = prof_curs_curso_id";
+        JOIN cursos ON curs_id = prof_curs_curso_id where prof_estado='A'";
 $stmt = $pdo->query($sql);
 ?>
 
