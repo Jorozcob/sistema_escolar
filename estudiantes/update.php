@@ -24,6 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+//Se obtiene el ID del estudiante desde la solicitud GET,
+//Los datos del estudiante se almacenan en la variable $estudiante.
 $id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
 $sql = "SELECT * FROM estudiantes WHERE estu_id = ?";
 $stmt = $pdo->prepare($sql);

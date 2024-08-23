@@ -5,7 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombre = htmlspecialchars(trim($_POST['nombre']));
     $descripcion = htmlspecialchars(trim($_POST['descripcion']));
 
-    $sql = "INSERT INTO cursos (curs_nombre, curs_descripcion) VALUES (?, ?)";
+    $sql = "INSERT INTO cursos (curs_nombre, curs_descripcion) VALUES (?, ?)"; 
     $stmt = $pdo->prepare($sql);
     if ($stmt->execute([$nombre, $descripcion])) {
       header("Location: index.php");

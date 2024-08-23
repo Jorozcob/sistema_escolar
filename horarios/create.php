@@ -6,7 +6,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dia_semana = htmlspecialchars(trim($_POST['dia_semana']));
     $hora_inicio = htmlspecialchars(trim($_POST['hora_inicio']));
     $hora_fin = htmlspecialchars(trim($_POST['hora_fin']));
-
+    
+    //Se verifica si el curso_id es un número entero válido y si los campos dia_semana, hora_inicio y hora_fin no están vacíos.
     if (filter_var($curso_id, FILTER_VALIDATE_INT) && !empty($dia_semana) && !empty($hora_inicio) && !empty($hora_fin)) {
         $sql = "INSERT INTO horarios (hora_curso_id, hora_dia_semana, hora_inicio, hora_fin) VALUES (?, ?, ?, ?)";
         $stmt = $pdo->prepare($sql);

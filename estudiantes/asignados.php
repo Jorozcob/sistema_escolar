@@ -17,7 +17,7 @@ $sql = "SELECT
         ORDER BY 
             cursos.curs_nombre, estudiantes.estu_primer_apellido";
 
-$stmt = $pdo->query($sql);
+$stmt = $pdo->query($sql); //ejecutar consulta
 ?>
 
 <!DOCTYPE html>

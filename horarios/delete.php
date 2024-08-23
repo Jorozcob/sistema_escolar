@@ -2,6 +2,8 @@
 require '../conf/database.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    //se elimina cualquier carácter no numérico del ID y se valida que sea un número entero.
     $id = filter_var($_POST['id'], FILTER_SANITIZE_NUMBER_INT);
 
     if (filter_var($id, FILTER_VALIDATE_INT)) {
@@ -24,6 +26,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+
+//Se obtiene el ID del horario desde GET, 
+//Los datos del horario se almacenan en la variable $horario.
 $id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
 $sql = "SELECT * FROM horarios WHERE hora_id = ?";
 $stmt = $pdo->prepare($sql);
