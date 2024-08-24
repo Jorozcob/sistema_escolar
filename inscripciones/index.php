@@ -48,7 +48,8 @@
                     // Consulta SQL para obtener los estudiantes asignados a los cursos
                     $sql = "SELECT 
     estudiantes.estu_id AS estu_id,
-    CONCAT(estudiantes.estu_primer_nombre, ' ', estudiantes.estu_primer_apellido) AS estudiante_nombre,
+    CONCAT(estudiantes.estu_primer_nombre, ' ', 
+    estudiantes.estu_primer_apellido) AS estudiante_nombre,
     cursos.curs_id AS curs_id,
     cursos.curs_nombre AS curs_nombre,
     inscripciones.insc_fecha_inscripcion AS insc_fecha_inscripcion,
@@ -57,14 +58,13 @@
 FROM 
     inscripciones
 JOIN 
-    estudiantes ON inscripciones.insc_estudiante_id = estudiantes.estu_id
+    estudiantes ON insc_estudiante_id = estu_id
 JOIN 
-    cursos ON inscripciones.insc_curso_id = cursos.curs_id
+    cursos ON insc_curso_id = curs_id
 WHERE 
-    estudiantes.estu_estado = 'A'
+    insc_estado = 'A'
 ORDER BY 
-    cursos.curs_id
-";
+    curs_id";
 
                     $stmt = $pdo->query($sql);
 
