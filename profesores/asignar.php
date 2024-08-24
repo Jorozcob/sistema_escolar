@@ -1,15 +1,12 @@
 <?php
 require '../conf/database.php';
 
-// Si el formulario se envía
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $profesor_input = $_POST['profesor_id'];
     $curso_input = $_POST['curso_id'];
     
-    // Extraer el ID del profesor
     $profesor_id = intval(explode(' - ', $profesor_input)[0]);
     
-    // Extraer el ID del curso
     $curso_id = intval(explode(' - ', $curso_input)[0]);
 
     if ($profesor_id > 0 && $curso_id > 0) {
@@ -17,9 +14,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $pdo->prepare($sql);
         if ($stmt->execute([$profesor_id, $curso_id])) {
             echo "Asignación creada exitosamente.";
-            // Redirigir al índice después de crear la asignación
             header("Location: index.php");
-            exit(); // Asegura que se detiene la ejecución del script
+            exit(); 
         } else {
             echo "Error al crear la asignación.";
         }
